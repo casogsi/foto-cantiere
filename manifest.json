@@ -1,0 +1,13 @@
+{
+  "name": "Foto Cantiere",
+  "short_name": "Foto Cantiere",
+  "description": "Carica le foto di cantiere su Google Drive, una cartella per cantiere",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0f6b4f",
+  "theme_color": "#0f6b4f",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
