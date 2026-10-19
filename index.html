@@ -3,89 +3,162 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0f6b4f">
+<meta name="theme-color" content="#1f2326">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon.svg">
+<link rel="apple-touch-icon" href="icon.svg">
 <title>Foto Cantiere</title>
 <style>
-  :root { --bg:#f4f6f5; --card:#fff; --ink:#1a2421; --muted:#667570; --brand:#0f6b4f; --brand-ink:#fff; --line:#dbe3e0; --err:#b3261e; --ok:#0f6b4f; }
-  @media (prefers-color-scheme: dark) {
-    :root { --bg:#121816; --card:#1b2421; --ink:#eaf1ee; --muted:#93a39d; --brand:#3cc79a; --brand-ink:#04281d; --line:#2c3935; --err:#ff8a80; --ok:#3cc79a; }
+  :root {
+    --bg:#efece3; --card:#ffffff; --ink:#1f2326; --muted:#6b6f70; --line:#d9d4c5;
+    --yellow:#ffc400; --yellow-ink:#1f2326; --orange:#f26b00; --ok:#1b8a3a; --err:#c62828;
+    --head:#1f2326; --head-ink:#ffffff; --chip:#f6f3ea;
   }
-  * { box-sizing: border-box; }
-  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif; padding:16px; padding-bottom:calc(16px + env(safe-area-inset-bottom)); }
-  main { max-width:520px; margin:0 auto; display:flex; flex-direction:column; gap:14px; }
-  h1 { font-size:22px; margin:4px 0 0; }
-  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px; display:flex; flex-direction:column; gap:12px; }
-  label { font-weight:600; font-size:14px; }
-  input[type=text] { width:100%; padding:14px; font-size:17px; border:1px solid var(--line); border-radius:10px; background:var(--bg); color:var(--ink); }
-  button { font:inherit; font-weight:600; border:0; border-radius:12px; padding:15px; cursor:pointer; background:var(--brand); color:var(--brand-ink); width:100%; }
-  button.sec { background:transparent; color:var(--brand); border:1.5px solid var(--brand); }
-  button:disabled { opacity:.45; cursor:not-allowed; }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#141617; --card:#202325; --ink:#f1efe8; --muted:#9a9e9f; --line:#33383b;
+      --ok:#4cc46e; --err:#ff7b72; --chip:#2a2e30;
+    }
+  }
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html, body { margin:0; }
+  body { background:var(--bg); color:var(--ink); font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; padding-bottom:calc(24px + env(safe-area-inset-bottom)); }
+
+  header { background:var(--head); color:var(--head-ink); padding:calc(14px + env(safe-area-inset-top)) 16px 14px; display:flex; align-items:center; gap:12px; position:relative; }
+  header::after { content:""; position:absolute; left:0; right:0; bottom:-10px; height:10px;
+    background:repeating-linear-gradient(-45deg, var(--yellow) 0 14px, #1f2326 14px 28px); }
+  header svg { width:40px; height:40px; flex:none; }
+  header h1 { margin:0; font-size:21px; letter-spacing:.06em; text-transform:uppercase; font-weight:800; line-height:1.1; }
+  header small { display:block; color:var(--yellow); font-weight:700; letter-spacing:.12em; font-size:11px; text-transform:uppercase; margin-top:2px; }
+
+  main { max-width:560px; margin:0 auto; padding:26px 16px 0; display:flex; flex-direction:column; gap:14px; }
+  .card { background:var(--card); border:1px solid var(--line); border-left:6px solid var(--yellow); border-radius:12px; padding:16px; display:flex; flex-direction:column; gap:12px; box-shadow:0 1px 0 rgba(0,0,0,.04); }
+  .card.orange { border-left-color:var(--orange); }
+  .step { display:flex; align-items:center; gap:10px; font-weight:800; text-transform:uppercase; letter-spacing:.06em; font-size:14px; }
+  .step b { display:inline-grid; place-items:center; width:26px; height:26px; border-radius:50%; background:var(--yellow); color:var(--yellow-ink); font-size:14px; letter-spacing:0; }
+  .step em { font-style:normal; font-weight:600; text-transform:none; letter-spacing:0; color:var(--muted); font-size:13px; }
+
+  input[type=text] { width:100%; padding:15px 14px; font-size:18px; font-weight:600; border:2px solid var(--line); border-radius:10px; background:var(--chip); color:var(--ink); outline:none; }
+  input[type=text]:focus { border-color:var(--yellow); box-shadow:0 0 0 3px rgba(255,196,0,.35); }
+  ::placeholder { color:var(--muted); font-weight:500; }
+
+  .chips { display:flex; flex-wrap:wrap; gap:8px; }
+  .chip { --c:#888; display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:999px; border:2px solid var(--line); background:var(--chip); color:var(--ink); font:inherit; font-weight:700; font-size:15px; width:auto; cursor:pointer; }
+  .chip i { width:12px; height:12px; border-radius:50%; background:var(--c); display:inline-block; }
+  .chip.on { background:var(--c); border-color:var(--c); color:#fff; }
+  .chip.on i { background:#fff; }
+  .chip.dark-ink.on { color:#1f2326; }
+  .chip.dark-ink.on i { background:#1f2326; }
+
+  button { font:inherit; font-weight:800; letter-spacing:.03em; border:0; border-radius:12px; padding:16px; cursor:pointer; width:100%; display:flex; align-items:center; justify-content:center; gap:10px; }
+  button svg { width:22px; height:22px; flex:none; }
+  .btn-main { background:var(--yellow); color:var(--yellow-ink); font-size:18px; padding:18px; box-shadow:0 3px 0 #b88c00; }
+  .btn-main:active { transform:translateY(2px); box-shadow:0 1px 0 #b88c00; }
+  .btn-sec { background:transparent; color:var(--ink); border:2px solid var(--ink); }
+  .btn-go { background:var(--orange); color:#fff; font-size:18px; padding:18px; box-shadow:0 3px 0 #a84a00; text-transform:uppercase; }
+  .btn-go:active:not(:disabled) { transform:translateY(2px); box-shadow:0 1px 0 #a84a00; }
+  .btn-link { background:transparent; color:var(--muted); font-weight:600; padding:8px; width:auto; align-self:center; }
+  button:disabled { opacity:.4; cursor:not-allowed; box-shadow:none; }
   .row { display:flex; gap:10px; }
-  .muted { color:var(--muted); font-size:14px; }
-  .hidden { display:none !important; }
-  ul { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px; }
-  li { display:flex; align-items:center; gap:10px; font-size:14px; }
-  li img { width:44px; height:44px; object-fit:cover; border-radius:8px; flex:none; }
-  li .name { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-  .st { font-weight:600; flex:none; }
-  .st.ok { color:var(--ok); } .st.err { color:var(--err); }
-  #msg { font-size:14px; }
+  .row > button { flex:1; }
+
+  .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+  .grid:empty { display:none; }
+  .th { position:relative; aspect-ratio:1; border-radius:10px; overflow:hidden; background:var(--chip); border:2px solid var(--line); }
+  .th img { width:100%; height:100%; object-fit:cover; display:block; }
+  .th .badge { position:absolute; left:6px; bottom:6px; padding:2px 8px; border-radius:99px; font-size:12px; font-weight:800; background:rgba(0,0,0,.7); color:#fff; }
+  .th.ok { border-color:var(--ok); } .th.ok .badge { background:var(--ok); }
+  .th.err { border-color:var(--err); } .th.err .badge { background:var(--err); }
+  .th.up img { opacity:.45; }
+  .th .x { position:absolute; top:4px; right:4px; width:28px; height:28px; padding:0; border-radius:50%; background:rgba(0,0,0,.7); color:#fff; font-size:18px; line-height:1; display:grid; place-items:center; letter-spacing:0; }
+  .count { font-size:14px; color:var(--muted); font-weight:700; }
+
+  #msg { font-size:15px; font-weight:700; }
+  #msg.muted { color:var(--muted); font-weight:600; }
   #msg.err { color:var(--err); }
+  #msg.okk { color:var(--ok); }
+  .muted { color:var(--muted); }
+  .hidden { display:none !important; }
+  #loginCard p { margin:0; }
 </style>
 </head>
 <body>
-<main>
-  <h1>Foto Cantiere</h1>
+<header>
+  <svg viewBox="0 0 64 64" aria-hidden="true">
+    <path d="M8 44h48v6a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2z" fill="#ffc400"/>
+    <path d="M14 44c0-12 7-22 18-22s18 10 18 22z" fill="#ffc400"/>
+    <rect x="29" y="14" width="6" height="30" rx="2" fill="#e0a800"/>
+    <path d="M22 44c0-8 3-14 8-17" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none" opacity=".7"/>
+  </svg>
+  <div><h1>Foto Cantiere</h1><small>Archivio su Google Drive</small></div>
+</header>
 
+<main>
   <section class="card" id="loginCard">
-    <p class="muted" style="margin:0">Accedi con il tuo account Google per salvare le foto su Drive.</p>
-    <button id="btnLogin">Accedi con Google</button>
+    <p class="muted">Accedi con il tuo account Google per salvare le foto su Drive.</p>
+    <button class="btn-main" id="btnLogin">Accedi con Google</button>
+    <div id="cfgErr" class="hidden" style="color:var(--err);font-weight:700"></div>
   </section>
 
-  <section class="card hidden" id="mainCard">
-    <div>
-      <label for="cantiere">Cantiere</label>
+  <div id="mainCard" class="hidden" style="display:contents">
+    <section class="card">
+      <div class="step"><b>1</b> Cantiere</div>
       <input type="text" id="cantiere" list="recenti" placeholder="Es. Via Roma 12 - Impianto elettrico" autocomplete="off">
       <datalist id="recenti"></datalist>
-    </div>
-    <div>
-      <label for="impianto">Tipologia impianto <span class="muted">(facoltativo)</span></label>
-      <input type="text" id="impianto" list="tipi" placeholder="Es. Elettrico" autocomplete="off">
-      <datalist id="tipi"></datalist>
-    </div>
-    <div class="row">
-      <button class="sec" id="btnCamera">Scatta foto</button>
-      <button class="sec" id="btnGallery">Galleria</button>
-    </div>
-    <input type="file" id="fileCamera" accept="image/*" capture="environment" class="hidden">
-    <input type="file" id="fileGallery" accept="image/*" multiple class="hidden">
-    <ul id="list"></ul>
-    <button id="btnUpload" disabled>Carica su Drive</button>
-    <div id="msg" class="muted"></div>
-    <button class="sec" id="btnLogout">Esci</button>
-  </section>
+    </section>
+
+    <section class="card">
+      <div class="step"><b>2</b> Tipologia impianto <em>(facoltativo)</em></div>
+      <div class="chips" id="chips"></div>
+      <input type="text" id="impianto" placeholder="Oppure scrivi un altro tipo" autocomplete="off">
+    </section>
+
+    <section class="card orange">
+      <div class="step"><b>3</b> Foto <span class="count" id="count"></span></div>
+      <button class="btn-main" id="btnCamera">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 3l-1.8 2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3zm3 15a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+        Scatta foto
+      </button>
+      <button class="btn-sec" id="btnGallery">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm2 12h12l-3.5-4.5-2.5 3-2-2.5z"/></svg>
+        Scegli dalla galleria
+      </button>
+      <input type="file" id="fileCamera" accept="image/*" capture="environment" class="hidden">
+      <input type="file" id="fileGallery" accept="image/*" multiple class="hidden">
+      <div class="grid" id="list"></div>
+      <button class="btn-go" id="btnUpload" disabled>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l5 5h-3.5v6h-3V8H7zM5 17h14v3H5z"/></svg>
+        Carica su Drive
+      </button>
+      <div id="msg" class="muted"></div>
+    </section>
+
+    <button class="btn-link" id="btnLogout">Esci dall'account</button>
+  </div>
 </main>
 
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="config.js"></script>
 <script>
-// ====== CONFIGURAZIONE ======
-const CLIENT_ID = "281735115644-dnfo3tu7cq2l56m4t1606q23socs96d4.apps.googleusercontent.com";
-const ROOT_FOLDER = "Foto Cantieri"; // cartella principale su Drive
-// ============================
-
 const SCOPE = "https://www.googleapis.com/auth/drive.file";
 const $ = id => document.getElementById(id);
 let tokenClient, accessToken = null, tokenExp = 0, queue = [];
 
-function setMsg(t, err) { const m = $("msg"); m.textContent = t || ""; m.className = err ? "err" : "muted"; }
+function setMsg(t, kind) { const m = $("msg"); m.textContent = t || ""; m.className = kind || "muted"; }
+
+// controllo configurazione
+const cfgOk = typeof CLIENT_ID !== "undefined" && CLIENT_ID && !CLIENT_ID.includes("INCOLLA");
+if (!cfgOk) {
+  const e = $("cfgErr"); e.classList.remove("hidden");
+  e.textContent = "Manca il Client ID: apri il file config.js su GitHub e incollalo.";
+  $("btnLogin").disabled = true;
+}
+const ROOT = (typeof ROOT_FOLDER !== "undefined" && ROOT_FOLDER) ? ROOT_FOLDER : "Foto Cantieri";
 
 function initAuth() {
+  if (!cfgOk) return;
   if (!window.google || !google.accounts) { setTimeout(initAuth, 300); return; }
-  tokenClient = google.accounts.oauth2.initTokenClient({
-    client_id: CLIENT_ID, scope: SCOPE, callback: () => {}
-  });
+  tokenClient = google.accounts.oauth2.initTokenClient({ client_id: CLIENT_ID, scope: SCOPE, callback: () => {} });
 }
 initAuth();
 
@@ -104,7 +177,7 @@ function getToken(prompt) {
   });
 }
 
-function showMain() { $("loginCard").classList.add("hidden"); $("mainCard").classList.remove("hidden"); loadRecent(); loadTipi(); }
+function showMain() { $("loginCard").classList.add("hidden"); $("mainCard").classList.remove("hidden"); loadRecent(); renderChips(); render(); }
 
 $("btnLogin").onclick = async () => {
   try { await getToken("consent"); showMain(); } catch (e) { alert("Accesso non riuscito: " + e.message); }
@@ -115,7 +188,6 @@ $("btnLogout").onclick = () => {
   try { localStorage.removeItem("fc_signed"); } catch (e) {}
   $("mainCard").classList.add("hidden"); $("loginCard").classList.remove("hidden");
 };
-// se già autorizzato in passato, mostra subito la schermata principale (il token si rinnova al caricamento)
 try { if (localStorage.getItem("fc_signed")) showMain(); } catch (e) {}
 
 // ----- cantieri recenti -----
@@ -124,44 +196,71 @@ function loadRecent() {
   $("recenti").innerHTML = r.map(n => `<option value="${n.replace(/"/g, "&quot;")}">`).join("");
   if (r[0] && !$("cantiere").value) $("cantiere").value = r[0];
 }
-// ----- tipologie impianto -----
-const TIPI_BASE = ["Elettrico", "Idraulico", "Climatizzazione", "Antincendio", "Fotovoltaico", "Gas", "Speciali", "Altro"];
-function loadTipi() {
-  let r = []; try { r = JSON.parse(localStorage.getItem("fc_tipi") || "[]"); } catch (e) {}
-  const all = [...new Set([...r, ...TIPI_BASE])];
-  $("tipi").innerHTML = all.map(n => `<option value="${n.replace(/"/g, "&quot;")}">`).join("");
-}
-function saveTipo(n) {
-  let r = []; try { r = JSON.parse(localStorage.getItem("fc_tipi") || "[]"); } catch (e) {}
-  if (TIPI_BASE.includes(n)) return;
-  r = [n, ...r.filter(x => x !== n)].slice(0, 15);
-  try { localStorage.setItem("fc_tipi", JSON.stringify(r)); } catch (e) {}
-}
 function saveRecent(n) {
   let r = []; try { r = JSON.parse(localStorage.getItem("fc_recent") || "[]"); } catch (e) {}
   r = [n, ...r.filter(x => x !== n)].slice(0, 15);
   try { localStorage.setItem("fc_recent", JSON.stringify(r)); } catch (e) {}
 }
 
+// ----- tipologie impianto (tasti colorati) -----
+const TIPI_BASE = [
+  { n: "Elettrico", c: "#f2b600", dark: true },
+  { n: "Idraulico", c: "#1976d2" },
+  { n: "Climatizzazione", c: "#00a6c8" },
+  { n: "Antincendio", c: "#d32f2f" },
+  { n: "Fotovoltaico", c: "#f26b00" },
+  { n: "Gas", c: "#2e9e4f" },
+  { n: "Speciali", c: "#7e57c2" },
+  { n: "Altro", c: "#6d767a" }
+];
+function customTipi() { let r = []; try { r = JSON.parse(localStorage.getItem("fc_tipi") || "[]"); } catch (e) {} return r; }
+function saveTipo(n) {
+  if (TIPI_BASE.some(t => t.n === n)) return;
+  const r = [n, ...customTipi().filter(x => x !== n)].slice(0, 10);
+  try { localStorage.setItem("fc_tipi", JSON.stringify(r)); } catch (e) {}
+}
+function renderChips() {
+  const cur = $("impianto").value.trim();
+  const all = [...TIPI_BASE, ...customTipi().filter(n => !TIPI_BASE.some(t => t.n === n)).map(n => ({ n, c: "#6d767a" }))];
+  $("chips").innerHTML = "";
+  all.forEach(t => {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "chip" + (t.dark ? " dark-ink" : "") + (cur === t.n ? " on" : "");
+    b.style.setProperty("--c", t.c);
+    b.innerHTML = "<i></i>"; b.append(t.n);
+    b.onclick = () => { $("impianto").value = (cur === t.n) ? "" : t.n; renderChips(); };
+    $("chips").appendChild(b);
+  });
+}
+$("impianto").addEventListener("input", renderChips);
+
 // ----- selezione foto -----
 $("btnCamera").onclick = () => $("fileCamera").click();
 $("btnGallery").onclick = () => $("fileGallery").click();
 function addFiles(files) {
   for (const f of files) queue.push({ file: f, status: "wait", url: URL.createObjectURL(f) });
-  render();
+  setMsg(""); render();
 }
 $("fileCamera").onchange = e => { addFiles(e.target.files); e.target.value = ""; };
 $("fileGallery").onchange = e => { addFiles(e.target.files); e.target.value = ""; };
 
 function render() {
-  $("list").innerHTML = "";
-  queue.forEach(q => {
-    const li = document.createElement("li");
-    const label = { wait: "In attesa", up: "Invio…", ok: "✓ Caricata", err: "Errore" }[q.status];
-    li.innerHTML = `<img src="${q.url}" alt=""><span class="name"></span><span class="st ${q.status === "ok" ? "ok" : q.status === "err" ? "err" : ""}">${label}</span>`;
-    li.querySelector(".name").textContent = q.file.name;
-    $("list").appendChild(li);
+  const list = $("list"); list.innerHTML = "";
+  queue.forEach((q, i) => {
+    const d = document.createElement("div");
+    d.className = "th " + q.status;
+    const label = { wait: "", up: "Invio…", ok: "✓ Caricata", err: "Errore" }[q.status];
+    d.innerHTML = `<img src="${q.url}" alt="">` + (label ? `<span class="badge">${label}</span>` : "");
+    if (q.status === "wait" || q.status === "err") {
+      const x = document.createElement("button");
+      x.type = "button"; x.className = "x"; x.textContent = "×"; x.setAttribute("aria-label", "Rimuovi foto");
+      x.onclick = () => { queue.splice(i, 1); render(); };
+      d.appendChild(x);
+    }
+    list.appendChild(d);
   });
+  const n = queue.filter(q => q.status !== "ok").length;
+  $("count").textContent = queue.length ? `· ${queue.length} selezionate` : "";
   $("btnUpload").disabled = !queue.some(q => q.status === "wait" || q.status === "err");
 }
 
@@ -199,19 +298,19 @@ function stamp(f) {
 $("btnUpload").onclick = async () => {
   const cantiere = $("cantiere").value.trim().replace(/[\\/]/g, "-");
   const impianto = $("impianto").value.trim().replace(/[\\/]/g, "-");
-  if (!cantiere) { setMsg("Inserisci il nome del cantiere.", true); $("cantiere").focus(); return; }
+  if (!cantiere) { setMsg("Inserisci il nome del cantiere.", "err"); $("cantiere").focus(); return; }
   $("btnUpload").disabled = true; setMsg("Connessione a Drive…");
   try {
     await getToken("");
-    const rootId = await findOrCreateFolder(ROOT_FOLDER);
+    const rootId = await findOrCreateFolder(ROOT);
     let folderId = await findOrCreateFolder(cantiere, rootId);
     if (impianto) { folderId = await findOrCreateFolder(impianto, folderId); saveTipo(impianto); }
-    saveRecent(cantiere);
-    const percorso = `${ROOT_FOLDER}/${cantiere}${impianto ? "/" + impianto : ""}`;
+    saveRecent(cantiere); renderChips();
+    const percorso = `${ROOT}/${cantiere}${impianto ? "/" + impianto : ""}`;
     let n = 0;
     for (const q of queue) {
       if (q.status === "ok") continue;
-      q.status = "up"; render(); setMsg("Carico…");
+      q.status = "up"; render(); setMsg("Carico le foto…");
       try {
         const ext = (q.file.name.split(".").pop() || "jpg").toLowerCase();
         n++;
@@ -221,10 +320,10 @@ $("btnUpload").onclick = async () => {
       render();
     }
     const ko = queue.filter(q => q.status === "err").length;
-    setMsg(ko ? `${ko} foto non caricate. Premi di nuovo "Carica".` : `Fatto! Foto salvate in ${percorso}`, !!ko);
-    if (!ko) setTimeout(() => { queue = []; render(); }, 2500);
+    setMsg(ko ? `${ko} foto non caricate. Premi di nuovo "Carica su Drive".` : `Fatto! Foto salvate in ${percorso}`, ko ? "err" : "okk");
+    if (!ko) setTimeout(() => { queue = []; render(); }, 3000);
   } catch (e) {
-    setMsg("Errore: " + e.message, true);
+    setMsg("Errore: " + e.message, "err");
   }
   render();
 };

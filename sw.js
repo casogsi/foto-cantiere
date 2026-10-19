@@ -1,6 +1,6 @@
 // Service worker minimo: rende l'app installabile e tiene in cache la pagina.
-const CACHE = "foto-cantiere-v1";
-const FILES = ["./", "./index.html", "./manifest.json", "./icon.svg"];
+const CACHE = "foto-cantiere-v2";
+const FILES = ["./", "./index.html", "./config.js", "./manifest.json", "./icon.svg"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)));
