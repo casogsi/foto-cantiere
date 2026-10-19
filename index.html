@@ -204,14 +204,10 @@ function saveRecent(n) {
 
 // ----- tipologie impianto (tasti colorati) -----
 const TIPI_BASE = [
-  { n: "Elettrico", c: "#f2b600", dark: true },
-  { n: "Idraulico", c: "#1976d2" },
-  { n: "Climatizzazione", c: "#00a6c8" },
-  { n: "Antincendio", c: "#d32f2f" },
-  { n: "Fotovoltaico", c: "#f26b00" },
-  { n: "Gas", c: "#2e9e4f" },
-  { n: "Speciali", c: "#7e57c2" },
-  { n: "Altro", c: "#6d767a" }
+  { n: "SANITARIO", c: "#1976d2" },
+  { n: "ANTINCENDIO", c: "#d32f2f" },
+  { n: "CLIMATIZZAZIONE", c: "#00a6c8" },
+  { n: "TECNOLOGICI", c: "#7e57c2" }
 ];
 function customTipi() { let r = []; try { r = JSON.parse(localStorage.getItem("fc_tipi") || "[]"); } catch (e) {} return r; }
 function saveTipo(n) {
